@@ -1,6 +1,7 @@
 import openai
 import os
 import sys
+from typing import List
 
 # Set the API key to the value of the second command line argument,
 # the OPENAI_API_KEY environment variable, or a default value if
@@ -17,7 +18,7 @@ openai.api_key = openai_api_key
 directory = sys.argv[1] if len(sys.argv) > 1 else "./"
 
 
-def check_vulnerabilities(filename):
+def check_vulnerabilities(filename: str) -> List[str]:
     # Check if the file has a code file extension.
     if os.path.splitext(filename)[1] in (".py", ".go", ".js", ".php"):
         # Read the code from the file.
@@ -26,6 +27,7 @@ def check_vulnerabilities(filename):
         PROMPT = f"Please provide only a list of vulnerabilities and the line in which it manifests itself in the following code:\n{code}"
         MAX_TOKENS = 4000 - len(PROMPT)
         # Use GPT-3 to detect vulnerabilities in the code.
+        # maybe codex?
         response = openai.Completion.create(
             model="text-davinci-002",
             prompt=PROMPT,
